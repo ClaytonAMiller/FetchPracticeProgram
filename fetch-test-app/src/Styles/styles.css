@@ -195,6 +195,45 @@ button{
     width: 32vw;
   }
 
+  .login-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .login-container #name{
+    font-size: 2rem;
+    margin: 1vw;
+  }
+  .login-container #email{
+    font-size: 2rem;
+    margin: 1vw;
+  }
+  .login-container .login-button{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: -moz-fit-content;
+    width: fit-content;
+    align-self: center;
+    background-color: #FBA918;
+    margin: 1vw;
+    font-size: 2rem;
+    border: none;
+    border-radius: 1vw;
+    padding: 0.4vw;
+  }
+
+  .login-container h1{
+    text-align: center;
+  }
+
+  .login-container h3{
+    text-align: center;
+    margin: 3vw
+  }
+
   @media (max-width: 768px) {
     h2{
       margin:  0 1vw;
@@ -218,6 +257,30 @@ button{
     .breedTags{
       max-width: 90vw;
     }
+
+    .login-container #name{
+      font-size: 1rem;
+      margin: 2vw;
+    }
+    .login-container #email{
+      font-size: 1rem;
+      margin: 2vw;
+    }
+    .login-container .login-button{
+      position: relative;
+      top: 0;
+      left: 0;
+      width: -moz-fit-content;
+      width: fit-content;
+      align-self: center;
+      background-color: #FBA918;
+      margin: 2vw;
+      font-size: 1rem;
+      border: none;
+      border-radius: 1vw;
+      padding: 0.4vw;
+    }
+    
 
   }
 
