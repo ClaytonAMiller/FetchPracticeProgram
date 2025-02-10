@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 function MatchedDog(props) {
-  const [image, setImage] = useState("");
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [zip, setZip] = useState("");
-  const [breed, setBreed] = useState("");
+  const [image, setImage] = useState(""); // image retrieved from API call
+  const [name, setName] = useState(""); // name retrieved from API call
+  const [age, setAge] = useState(""); // age retrieved from API call
+  const [zip, setZip] = useState(""); // zip code retrieved from API call
+  const [breed, setBreed] = useState(""); // breed retrieved from API call
 
+  // Function to fetch dog data from the API
   function getDog() {
     const matchedDog = props.id;
     console.log("dog Id: ", props.id);
@@ -43,6 +44,7 @@ function MatchedDog(props) {
       });
   }
 
+  // Call getDog when the component mounts or when props.id changes
   useEffect(() => {
     if(props.id != null){
         getDog();
@@ -50,6 +52,7 @@ function MatchedDog(props) {
     
   }, [props.id]);
 
+  // Function to close the modal
   function handleClose() {
     props.setView("none");
     document.body.style.overflow = 'auto';

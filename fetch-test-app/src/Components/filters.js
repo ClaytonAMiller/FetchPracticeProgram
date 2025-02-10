@@ -4,17 +4,18 @@ import "../Styles/styles.css";
 const Filters = ({
   breeds,
   breedFilter,
-  zipCode,
-  zipCodeFilter,
+  // zipCode,
+  // zipCodeFilter,
   handleBreedChange,
   handleBreedRemoval,
-  handleZipCodeChange,
-  handleZipCodeKeyDown,
-  handleZipCodeRemoval,
+  // handleZipCodeChange,
+  // handleZipCodeKeyDown,
+  // handleZipCodeRemoval,
   handleMatchWithDog,
   handleSortByDesc,
   handleSortByAsc,
 }) => {
+  // constructs a new option tag for each breed in breeds list
   const breedsList = breeds.map((breed) => (
     <option key={breed} value={breed}>
       {breed}
@@ -63,11 +64,11 @@ const Filters = ({
       </div> */}
       <div className="filters-button-container">
         <div className="filter-buttons">
-          <button className="filter-button" onClick={handleSortByDesc}>
+          <button className="filter-button" onClick={handleSortByAsc}>
             Breeds A-Z
           </button>
-          <button className="filter-button" onClick={handleSortByAsc}>
-           Breeds Z-A
+          <button className="filter-button" onClick={handleSortByDesc}>
+            Breeds Z-A
           </button>
         </div>
         <button className="match-button" onClick={handleMatchWithDog}>

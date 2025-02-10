@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import "../Styles/styles.css";
 
 const DogList = React.memo(({ dogIds, handleFavoriteClick, favorites }) => {
-  const [dogs, setDogs] = useState([]);
+  const [dogs, setDogs] = useState([]); // List of dog objects
 
+  // Function to fetch dog data from the API
   const getDogs = useCallback(() => {
-    console.log("Fetching dog data for IDs: ", dogIds);
+    // console.log("Fetching dog data for IDs: ", dogIds); // Debugging line
     const url = "https://frontend-take-home-service.fetch.com/dogs";
     const data = dogIds; // Assuming dogIds is an array of dog IDs
     const options = {

@@ -2,7 +2,6 @@ import { Routes, Route, Router } from "react-router-dom";
 import Home from "./Components/home.js";
 import Login from "./Components/login.js";
 import React from "react";
-import { Helmet } from "react-helmet";  
 
 
 function App() {

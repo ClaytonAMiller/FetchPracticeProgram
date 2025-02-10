@@ -3,6 +3,8 @@ import React from "react";
 import { Helmet } from "react-helmet";
 
 function Home() {
+
+  //Logout Function: Hits the logout endpoint and redirects to the login page
   function logout($name, $email) {
     const url = "https://frontend-take-home-service.fetch.com/auth/logout";
     const data = {
@@ -15,7 +17,7 @@ function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: "include",
+      credentials: "include",//HTTPonly cookies are included in the request
     };
     fetch(url, options)
       .then((response) => {
@@ -26,6 +28,9 @@ function Home() {
       })
       .then((data) => {
         console.log("Success:", data);
+        // Clear session storage
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("email");
         window.location.href = "/"; // Redirect to another route
       })
       .catch((error) => {
@@ -33,13 +38,15 @@ function Home() {
       });
   }
 
+  //Logout button: Calls the logout function
   function handleLogout(event) {
     event.preventDefault();
     console.log("Form submitted");
+    //pulls the name and email from local storage
     logout(
-      localStorage.getItem("name").value,
+      localStorage.getItem("name").value, 
       localStorage.getItem("email").value
-    );
+    ); 
   }
 
   return (
@@ -55,7 +62,6 @@ function Home() {
         Logout
       </button>
       <Dogs  />
-      
     </div>
   );
 }
