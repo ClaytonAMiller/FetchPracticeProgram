@@ -9,6 +9,7 @@ const Dogs = (props) => {
   const [zipCode, setZipCode] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [favorites, setFavorites] = useState([]);
   const size = 25; // Number of results per page
 
   function getDogBreeds() {
@@ -118,6 +119,12 @@ const Dogs = (props) => {
     }
   }
 
+  function handleFavoriteClick(dogId) {
+    console.log("favoriting dog added: ", dogId);
+    setFavorites((prev) => [...prev, dogId]);
+    console.log("favorites: ", favorites);
+  }
+
   const breedsList = breeds.map((breed) => (
     <option key={breed} value={breed}>
       {breed}
@@ -125,7 +132,7 @@ const Dogs = (props) => {
   ));
 
   const dogList = dogs.map((dog) => (
-    <Dog key={dog} id={dog} />
+    <Dog key={dog} id={dog} onFavoriteClick={handleFavoriteClick}/>
   ));
 
   return (

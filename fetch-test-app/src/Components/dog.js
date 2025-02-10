@@ -44,7 +44,8 @@ function Dog(props) {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
+    <div className="dog-container" style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
+      <button style={{ position: "relative", top: "0", left: "21.75vw", width: "fit-content" }} onClick={() => props.onFavoriteClick(props.id)}>Favorite</button>
       <p>name: {name}</p>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
