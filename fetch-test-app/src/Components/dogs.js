@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Dog from "./dog";
+import MatchedDog from "./matchedDog";
 
 const Dogs = (props) => {
   const [breeds, setBreeds] = useState([]);
@@ -7,9 +8,11 @@ const Dogs = (props) => {
   const [selectedBreed, setSelectedBreed] = useState("");
   const [breedFilter, setBreedFilter] = useState([]);
   const [zipCode, setZipCode] = useState("");
+  const [zipCodeFilter, setZipCodeFilter] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [favorites, setFavorites] = useState([]);
+  const [matchedDogDisplay, setMatchedDogDisplay] = useState("none");
   const size = 25; // Number of results per page
 
   function getDogBreeds() {
@@ -40,7 +43,7 @@ const Dogs = (props) => {
 
   function getAllDogs(page = 1, sortBy = "breed:asc") {
     const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
-    const zipQuery = zipCode ? `zipCodes=${zipCode}` : "";
+    const zipQuery = zipCodeFilter.map((zip) => `zipCodes=${zip}`).join("&");
     const sortQuery = `sort=${sortBy}`;
     const fromQuery = `from=${(page - 1) * size}`;
     const sizeQuery = `size=${size}`;
@@ -70,6 +73,37 @@ const Dogs = (props) => {
       });
   }
 
+  function matchWithDog() {
+    const url = `https://frontend-take-home-service.fetch.com/dogs/match`;
+    const data = favorites;
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    };
+    fetch(url, options)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
+
+  function handleMatchWithDog() {
+    matchWithDog();
+    setMatchedDogDisplay("flex");
+  }
+
   function checkLoggedIn() {
     getDogBreeds();
     return true;
@@ -81,7 +115,7 @@ const Dogs = (props) => {
 
   useEffect(() => {
     getAllDogs(currentPage);
-  }, [breedFilter, zipCode, currentPage]);
+  }, [breedFilter, zipCodeFilter, currentPage]);
 
   function addTobreedFilter(breed) {
     setBreedFilter((prev) => [...prev, breed]);
@@ -103,8 +137,19 @@ const Dogs = (props) => {
   }
 
   function handleZipCodeChange(event) {
-    console.log("Zip code:", event.target.value);
     setZipCode(event.target.value);
+  }
+
+  function handleZipCodeKeyDown(event) {
+    if (event.key === "Enter") {
+      setZipCodeFilter((prev) => [...prev, zipCode]);
+      setZipCode("");
+      getAllDogs();
+    }
+  }
+
+  function handleZipCodeRemoval(zip) {
+    setZipCodeFilter((prev) => prev.filter((z) => z !== zip));
   }
 
   function handleNextPage() {
@@ -132,11 +177,12 @@ const Dogs = (props) => {
   ));
 
   const dogList = dogs.map((dog) => (
-    <Dog key={dog} id={dog} onFavoriteClick={handleFavoriteClick}/>
+    <Dog key={dog} id={dog} onFavoriteClick={handleFavoriteClick} />
   ));
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
+      <MatchedDog id={favorites[favorites.length - 1]} style={{ display: "none" }} />
       <h1>Dogs</h1>
       <div className="filters">
         <select onChange={handleBreedChange}>
@@ -172,8 +218,31 @@ const Dogs = (props) => {
           placeholder="Zip Code"
           value={zipCode}
           onChange={handleZipCodeChange}
+          onKeyDown={handleZipCodeKeyDown}
         />
-        <div className="tags"></div>
+        <div className="zipTags">
+          {zipCodeFilter.map((zip) => (
+            <div
+              key={zip}
+              className="tag"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                border: "1px solid",
+                backgroundColor: "lightgray",
+                width: "fit-content",
+              }}
+            >
+              <p style={{ fontSize: "15px", margin: "2px 8px" }}>{zip}</p>
+              <div
+                onClick={() => handleZipCodeRemoval(zip)}
+                style={{ margin: "0 8px 0 0", cursor: "pointer" }}
+              >
+                x
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div
@@ -197,6 +266,10 @@ const Dogs = (props) => {
           Next
         </button>
       </div>
+
+      <button onClick={handleMatchWithDog} style={{ alignSelf: "center", marginTop: "20px" }}>
+        Match with Dog
+      </button>
     </div>
   );
 };
