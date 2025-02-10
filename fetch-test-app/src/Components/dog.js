@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 function Dog(props) {
-  const [image, setImage] = useState("");
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [zip, setZip] = useState("");
-  const [breed, setBreed] = useState("");
+  const [dogs, setDogs] = useState([]);
 
-  function getDog() {
-    console.log("dog Id: ", props.id);
+  function getDogs() {
+    console.log("dog Ids: ", props.ids);
     const url = "https://frontend-take-home-service.fetch.com/dogs";
-    const data = [props.id];
+    const data = props.ids; // Assuming props.ids is an array of dog IDs
+    console.log("data: ", data);
     const options = {
       method: "POST",
       headers: {
@@ -28,11 +25,7 @@ function Dog(props) {
       })
       .then((data) => {
         console.log("Success:", data);
-        setImage(data[0].img);
-        setName(data[0].name);
-        setAge(data[0].age);
-        setZip(data[0].zip_code);
-        setBreed(data[0].breed);
+        setDogs(data);
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
@@ -40,21 +33,25 @@ function Dog(props) {
   }
 
   useEffect(() => {
-    getDog();
-  }, []);
+    getDogs();
+  }, [props.ids]);
 
   return (
-    <div className="dog-container" style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
-      <button style={{ position: "relative", top: "0", left: "21.75vw", width: "fit-content" }} onClick={() => props.onFavoriteClick(props.id)}>Favorite</button>
-      <p>name: {name}</p>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>
-            <p>age: {age}</p>
-            <p>zip: {zip}</p>
-            <p>breed: {breed}</p>
+    <div>
+      {dogs.map((dog, index) => (
+        <div key={index} className="dog-container" style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
+          <button style={{ position: "relative", top: "0", left: "21.75vw", width: "fit-content" }} onClick={() => props.onFavoriteClick(dog.id)}>Favorite</button>
+          <p>name: {dog.name}</p>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <p>age: {dog.age}</p>
+              <p>zip: {dog.zip_code}</p>
+              <p>breed: {dog.breed}</p>
+            </div>
+            {dog.img && <img src={dog.img} alt={dog.name} style={{ height: "10vw" }} />}
+          </div>
         </div>
-        {image && <img src={image} alt={name} style={{ height: "10vw" }} />}
-      </div>
+      ))}
     </div>
   );
 }

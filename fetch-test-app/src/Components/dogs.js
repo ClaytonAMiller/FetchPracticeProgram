@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Dog from "./dog";
-import MatchedDog from "./matchedDog";
+import React, { useState, useEffect, useCallback } from "react";
+import Filters from "./filters.js";
+import Pagination from "./pagination.js";
+import DogList from "./doglist.js";
+import MatchedDog from "./matchedDog.js";
 
 const Dogs = (props) => {
   const [breeds, setBreeds] = useState([]);
@@ -16,7 +18,7 @@ const Dogs = (props) => {
   const [matchedDog, setMatchedDog] = useState(null);
   const size = 12; // Number of results per page
 
-  function getDogBreeds() {
+  const getDogBreeds = useCallback(() => {
     const url = "https://frontend-take-home-service.fetch.com/dogs/breeds";
     const options = {
       method: "GET",
@@ -40,10 +42,10 @@ const Dogs = (props) => {
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
-  }
+  }, []);
 
-  function getAllDogs(page = 1, sortBy = "breed:asc") {
-    if(sortBy === null) {
+  const getAllDogs = useCallback((page = 1, sortBy = "breed:asc") => {
+    if (sortBy === null) {
       sortBy = "breed:asc";
     }
     const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
@@ -51,7 +53,9 @@ const Dogs = (props) => {
     const sortQuery = `sort=${sortBy}`;
     const fromQuery = `from=${(page - 1) * size}`;
     const sizeQuery = `size=${size}`;
-    const queryString = [breedQuery, zipQuery, sortQuery, fromQuery, sizeQuery].filter(Boolean).join("&");
+    const queryString = [breedQuery, zipQuery, sortQuery, fromQuery, sizeQuery]
+      .filter(Boolean)
+      .join("&");
     const url = `https://frontend-take-home-service.fetch.com/dogs/search?${queryString}`;
     const options = {
       method: "GET",
@@ -69,15 +73,16 @@ const Dogs = (props) => {
       })
       .then((data) => {
         console.log("Success:", data);
+        console.log("dog Ids: ", data.resultIds);
         setDogs(data.resultIds);
         setTotalPages(Math.ceil(data.total / size)); // Assuming the API returns the total number of results
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
-  }
+  }, [breedFilter, zipCodeFilter]);
 
-  function matchWithDog() {
+  const matchWithDog = useCallback(() => {
     const url = `https://frontend-take-home-service.fetch.com/dogs/match`;
     const data = favorites;
     const options = {
@@ -102,179 +107,117 @@ const Dogs = (props) => {
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
-  }
+  }, [favorites]);
 
-  function handleMatchWithDog() {
+  const handleMatchWithDog = useCallback(() => {
     matchWithDog();
     setMatchedDogDisplay("flex");
-    document.body.style.overflow = 'hidden';
-  }
+    document.body.style.overflow = "hidden";
+  }, [matchWithDog]);
 
-  function checkLoggedIn() {
+  const checkLoggedIn = useCallback(() => {
     getDogBreeds();
     return true;
-  }
+  }, [getDogBreeds]);
 
   useEffect(() => {
     checkLoggedIn();
-  }, []);
+  }, [checkLoggedIn]);
 
   useEffect(() => {
-    getAllDogs(currentPage, null);
-  }, [breedFilter, zipCodeFilter, currentPage]);
+    getAllDogs(currentPage);
+  }, [breedFilter, zipCodeFilter, currentPage, getAllDogs]);
 
-  function addTobreedFilter(breed) {
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      goToLastPage();
+    }
+  }, [currentPage, totalPages]);
+
+  const addTobreedFilter = useCallback((breed) => {
     setBreedFilter((prev) => [...prev, breed]);
-  }
+  }, []);
 
-  function removeFromBreedFilter(breed) {
+  const removeFromBreedFilter = useCallback((breed) => {
     setBreedFilter((prev) => prev.filter((b) => b !== breed));
-  }
+  }, []);
 
-  function handleBreedRemoval(breed) {
+  const handleBreedRemoval = useCallback((breed) => {
     console.log("removing breed: ", breed);
     removeFromBreedFilter(breed);
-  }
+  }, [removeFromBreedFilter]);
 
-  function handleBreedChange(event) {
+  const handleBreedChange = useCallback((event) => {
     setSelectedBreed(event.target.value);
     console.log("Selected breed:", event.target.value);
     addTobreedFilter(event.target.value);
-  }
+  }, [addTobreedFilter]);
 
-  function handleZipCodeChange(event) {
+  const handleZipCodeChange = useCallback((event) => {
     setZipCode(event.target.value);
-  }
+  }, []);
 
-  function handleZipCodeKeyDown(event) {
+  const handleZipCodeKeyDown = useCallback((event) => {
     if (event.key === "Enter") {
       setZipCodeFilter((prev) => [...prev, zipCode]);
       setZipCode("");
     }
-  }
+  }, [zipCode]);
 
-  function handleZipCodeRemoval(zip) {
+  const handleZipCodeRemoval = useCallback((zip) => {
     setZipCodeFilter((prev) => prev.filter((z) => z !== zip));
-  }
+  }, []);
 
-  function handleNextPage() {
+  const handleNextPage = useCallback(() => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
-  }
+  }, [currentPage, totalPages]);
 
-  function handlePreviousPage() {
+  const handlePreviousPage = useCallback(() => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
-  }
+  }, [currentPage]);
 
-  function handleFavoriteClick(dogId) {
+  const goToLastPage = useCallback(() => {
+    setCurrentPage(totalPages);
+  }, [totalPages]);
+
+  const handleFavoriteClick = useCallback((dogId) => {
     console.log("favoriting dog added: ", dogId);
     setFavorites((prev) => [...prev, dogId]);
     console.log("favorites: ", favorites);
-  }
-
-  const breedsList = breeds.map((breed) => (
-    <option key={breed} value={breed}>
-      {breed}
-    </option>
-  ));
-
-  const dogList = dogs.map((dog) => (
-    <Dog key={dog} id={dog} onFavoriteClick={handleFavoriteClick} />
-  ));
+  }, [favorites]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <MatchedDog id={matchedDog} view={matchedDogDisplay} setView={setMatchedDogDisplay}  />
+      <MatchedDog
+        id={matchedDog}
+        view={matchedDogDisplay}
+        setView={setMatchedDogDisplay}
+      />
       <h1>Dogs</h1>
-      <div className="filters">
-        <select onChange={handleBreedChange}>
-          <option value="">Select a breed</option>
-          {breedsList}
-        </select>
-        <div className="breedTags">
-          {breedFilter.map((breed) => (
-            <div
-              key={breed}
-              className="tag"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid",
-                backgroundColor: "lightgray",
-                width: "fit-content",
-              }}
-            >
-              <p style={{ fontSize: "15px", margin: "2px 8px" }}>{breed}</p>
-              <div
-                onClick={() => handleBreedRemoval(breed)}
-                style={{ margin: "0 8px 0 0", cursor: "pointer" }}
-              >
-                x
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <input
-          type="text"
-          placeholder="Zip Code"
-          value={zipCode}
-          onChange={handleZipCodeChange}
-          onKeyDown={handleZipCodeKeyDown}
-        />
-        <div className="zipTags">
-          {zipCodeFilter.map((zip) => (
-            <div
-              key={zip}
-              className="tag"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid",
-                backgroundColor: "lightgray",
-                width: "fit-content",
-              }}
-            >
-              <p style={{ fontSize: "15px", margin: "2px 8px" }}>{zip}</p>
-              <div
-                onClick={() => handleZipCodeRemoval(zip)}
-                style={{ margin: "0 8px 0 0", cursor: "pointer" }}
-              >
-                x
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          maxWidth: "80vw",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          alignSelf: "center",
-        }}
-      >
-        {dogList}
-      </div>
-
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <p style={{ margin: "0 10px" }}>Page {currentPage} of {totalPages}</p>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button>
-      </div>
-
-      <button onClick={handleMatchWithDog} style={{ alignSelf: "center", marginTop: "20px" }}>
-        Match with Dog
-      </button>
+      <Filters
+        breeds={breeds}
+        breedFilter={breedFilter}
+        zipCode={zipCode}
+        zipCodeFilter={zipCodeFilter}
+        handleBreedChange={handleBreedChange}
+        handleBreedRemoval={handleBreedRemoval}
+        handleZipCodeChange={handleZipCodeChange}
+        handleZipCodeKeyDown={handleZipCodeKeyDown}
+        handleZipCodeRemoval={handleZipCodeRemoval}
+        handleMatchWithDog={handleMatchWithDog}
+      />
+      <DogList dogIds={dogs} handleFavoriteClick={handleFavoriteClick} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePreviousPage={handlePreviousPage}
+        handleNextPage={handleNextPage}
+        goToLastPage={goToLastPage}
+      />
     </div>
   );
 };
