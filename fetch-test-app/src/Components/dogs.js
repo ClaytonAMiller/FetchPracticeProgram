@@ -13,6 +13,7 @@ const Dogs = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const [favorites, setFavorites] = useState([]);
   const [matchedDogDisplay, setMatchedDogDisplay] = useState("none");
+  const [matchedDog, setMatchedDog] = useState(null);
   const size = 25; // Number of results per page
 
   function getDogBreeds() {
@@ -93,6 +94,7 @@ const Dogs = (props) => {
       })
       .then((data) => {
         console.log("Success:", data);
+        setMatchedDog(data); // Assuming the API returns an array with the matched dog data
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
@@ -102,6 +104,7 @@ const Dogs = (props) => {
   function handleMatchWithDog() {
     matchWithDog();
     setMatchedDogDisplay("flex");
+    document.body.style.overflow = 'hidden';
   }
 
   function checkLoggedIn() {
@@ -182,7 +185,7 @@ const Dogs = (props) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <MatchedDog id={favorites[favorites.length - 1]} style={{ display: "none" }} />
+      <MatchedDog id={matchedDog} view={matchedDogDisplay} setView={setMatchedDogDisplay}  />
       <h1>Dogs</h1>
       <div className="filters">
         <select onChange={handleBreedChange}>
