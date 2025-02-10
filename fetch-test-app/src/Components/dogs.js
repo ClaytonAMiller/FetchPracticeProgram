@@ -39,7 +39,7 @@ const Dogs = (props) => {
 
   function getAllDogs(page = 1, sortBy = "breed:asc") {
     const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
-    const zipQuery = zipCode ? `zip=${zipCode}` : "";
+    const zipQuery = zipCode ? `zipCodes=${zipCode}` : "";
     const sortQuery = `sort=${sortBy}`;
     const fromQuery = `from=${(page - 1) * size}`;
     const sizeQuery = `size=${size}`;
@@ -102,6 +102,7 @@ const Dogs = (props) => {
   }
 
   function handleZipCodeChange(event) {
+    console.log("Zip code:", event.target.value);
     setZipCode(event.target.value);
   }
 
