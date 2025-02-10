@@ -53,9 +53,7 @@ function Dog(props) {
             <p>zip: {zip}</p>
             <p>breed: {breed}</p>
         </div>
-        
-        <img src={image} alt={name} style={{height: "10vw"}}/>
-        
+        {image && <img src={image} alt={name} style={{ height: "10vw" }} />}
       </div>
     </div>
   );

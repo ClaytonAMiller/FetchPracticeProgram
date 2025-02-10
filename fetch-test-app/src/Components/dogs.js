@@ -14,7 +14,7 @@ const Dogs = (props) => {
   const [favorites, setFavorites] = useState([]);
   const [matchedDogDisplay, setMatchedDogDisplay] = useState("none");
   const [matchedDog, setMatchedDog] = useState(null);
-  const size = 25; // Number of results per page
+  const size = 12; // Number of results per page
 
   function getDogBreeds() {
     const url = "https://frontend-take-home-service.fetch.com/dogs/breeds";
@@ -43,6 +43,9 @@ const Dogs = (props) => {
   }
 
   function getAllDogs(page = 1, sortBy = "breed:asc") {
+    if(sortBy === null) {
+      sortBy = "breed:asc";
+    }
     const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
     const zipQuery = zipCodeFilter.map((zip) => `zipCodes=${zip}`).join("&");
     const sortQuery = `sort=${sortBy}`;
@@ -117,7 +120,7 @@ const Dogs = (props) => {
   }, []);
 
   useEffect(() => {
-    getAllDogs(currentPage);
+    getAllDogs(currentPage, null);
   }, [breedFilter, zipCodeFilter, currentPage]);
 
   function addTobreedFilter(breed) {
@@ -147,7 +150,6 @@ const Dogs = (props) => {
     if (event.key === "Enter") {
       setZipCodeFilter((prev) => [...prev, zipCode]);
       setZipCode("");
-      getAllDogs();
     }
   }
 
