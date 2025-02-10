@@ -1,21 +1,22 @@
 import React from "react";
+import "../Styles/styles.css";
+
 
 const Pagination = ({
   currentPage,
   totalPages,
   handlePreviousPage,
   handleNextPage,
-  goToLastPage,
 }) => {
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+    <div className="pagination-container">
+      <button className="pagination-button" onClick={handlePreviousPage} disabled={currentPage === 1}>
         Previous
       </button>
-      <p style={{ margin: "0 10px" }}>
+      <p className="pagination-info">
         Page {currentPage} of {totalPages}
       </p>
-      <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+      <button className="pagination-button" onClick={handleNextPage} disabled={currentPage === totalPages}>
         Next
       </button>
     </div>

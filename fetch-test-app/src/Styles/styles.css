@@ -1,0 +1,77 @@
+.dog-container {
+    display: flex;
+    flex-direction: column;
+    width: 25vw;
+  }
+  
+  .favorite-button {
+    position: relative;
+    top: 0;
+    left: 21.75vw;
+    width: fit-content;
+  }
+  
+  .dog-details {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .dog-img {
+    height: 10vw;
+  }
+  
+  .filters {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .breedTags .tag {
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    background-color: lightgray;
+    width: fit-content;
+  }
+  
+  .zipTags .tag {
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    background-color: lightgray;
+    width: fit-content;
+  }
+  
+  .filters-button {
+    align-self: center;
+    margin-top: 20px;
+  }
+  
+  .filters-select {
+    margin-bottom: 10px;
+  }
+  
+  .filters-input {
+    margin-bottom: 10px;
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    margin: 0 10px;
+  }
+  
+  .pagination-info {
+    margin: 0 10px;
+  }
+  
+  .dog-list-container {
+    display: flex;
+    max-width: 80vw;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-self: center;
+  }

@@ -3,6 +3,7 @@ import Filters from "./filters.js";
 import Pagination from "./pagination.js";
 import DogList from "./doglist.js";
 import MatchedDog from "./matchedDog.js";
+import "../Styles/styles.css";
 
 const Dogs = (props) => {
   const [breeds, setBreeds] = useState([]);
@@ -45,15 +46,22 @@ const Dogs = (props) => {
       });
   }, []);
 
-  const getAllDogs = useCallback((page = 1) => {
-    const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
-    const zipQuery = zipCodeFilter.map((zip) => `zipCodes=${zip}`).join("&");
-    const sortQuery = `sort=${sortBy}`;
-    const fromQuery = `from=${(page - 1) * size}`;
-    const sizeQuery = `size=${size}`;
-    const queryString = [breedQuery, zipQuery, sortQuery, fromQuery, sizeQuery]
-      .filter(Boolean)
+  const buildQueryString = (params) => {
+    return Object.keys(params)
+      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
       .join("&");
+  };
+
+  const getAllDogs = useCallback((page = 1) => {
+    const params = {
+      breeds: breedFilter.join(","),
+      zipCodes: zipCodeFilter.join(","),
+      sort: sortBy,
+      from: (page - 1) * size,
+      size: size,
+    };
+
+    const queryString = buildQueryString(params);
     const url = `https://frontend-take-home-service.fetch.com/dogs/search?${queryString}`;
     const options = {
       method: "GET",
@@ -62,6 +70,7 @@ const Dogs = (props) => {
       },
       credentials: "include",
     };
+
     fetch(url, options)
       .then((response) => {
         if (!response.ok) {

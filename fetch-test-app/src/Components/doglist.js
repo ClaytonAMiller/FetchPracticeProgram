@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import "../Styles/styles.css";
 
 const DogList = React.memo(({ dogIds, handleFavoriteClick }) => {
   const [dogs, setDogs] = useState([]);
@@ -36,26 +37,18 @@ const DogList = React.memo(({ dogIds, handleFavoriteClick }) => {
   }, [getDogs]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        maxWidth: "80vw",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        alignSelf: "center",
-      }}
-    >
+    <div className="dog-list-container">
       {dogs.map((dog, index) => (
-        <div key={index} className="dog-container" style={{ display: "flex", flexDirection: "column", width: "25vw" }}>
-          <button style={{ position: "relative", top: "0", left: "21.75vw", width: "fit-content" }} onClick={() => handleFavoriteClick(dog.id)}>Favorite</button>
+        <div key={index} className="dog-container">
+          <button className="favorite-button" onClick={() => handleFavoriteClick(dog.id)}>Favorite</button>
           <p>name: {dog.name}</p>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className="dog-details">
             <div>
               <p>age: {dog.age}</p>
               <p>zip: {dog.zip_code}</p>
               <p>breed: {dog.breed}</p>
             </div>
-            {dog.img && <img src={dog.img} alt={dog.name} style={{ height: "10vw" }} />}
+            {dog.img && <img src={dog.img} alt={dog.name} className="dog-img" />}
           </div>
         </div>
       ))}
