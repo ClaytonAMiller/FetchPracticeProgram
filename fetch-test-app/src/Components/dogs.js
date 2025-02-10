@@ -16,6 +16,7 @@ const Dogs = (props) => {
   const [favorites, setFavorites] = useState([]);
   const [matchedDogDisplay, setMatchedDogDisplay] = useState("none");
   const [matchedDog, setMatchedDog] = useState(null);
+  const [sortBy, setSortBy] = useState("breed:asc"); // Add state for sortBy
   const size = 12; // Number of results per page
 
   const getDogBreeds = useCallback(() => {
@@ -44,10 +45,7 @@ const Dogs = (props) => {
       });
   }, []);
 
-  const getAllDogs = useCallback((page = 1, sortBy = "breed:asc") => {
-    if (sortBy === null) {
-      sortBy = "breed:asc";
-    }
+  const getAllDogs = useCallback((page = 1) => {
     const breedQuery = breedFilter.map((breed) => `breeds=${breed}`).join("&");
     const zipQuery = zipCodeFilter.map((zip) => `zipCodes=${zip}`).join("&");
     const sortQuery = `sort=${sortBy}`;
@@ -80,7 +78,7 @@ const Dogs = (props) => {
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
-  }, [breedFilter, zipCodeFilter]);
+  }, [breedFilter, zipCodeFilter, sortBy]);
 
   const matchWithDog = useCallback(() => {
     const url = `https://frontend-take-home-service.fetch.com/dogs/match`;
@@ -190,6 +188,14 @@ const Dogs = (props) => {
     console.log("favorites: ", favorites);
   }, [favorites]);
 
+  const handleSortByDesc = useCallback(() => {
+    setSortBy("breed:desc");
+  }, []);
+
+  const handleSortByAsc = useCallback(() => {
+    setSortBy("breed:asc");
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <MatchedDog
@@ -209,6 +215,8 @@ const Dogs = (props) => {
         handleZipCodeKeyDown={handleZipCodeKeyDown}
         handleZipCodeRemoval={handleZipCodeRemoval}
         handleMatchWithDog={handleMatchWithDog}
+        handleSortByDesc={handleSortByDesc}
+        handleSortByAsc={handleSortByAsc}
       />
       <DogList dogIds={dogs} handleFavoriteClick={handleFavoriteClick} />
       <Pagination

@@ -18,9 +18,6 @@ const Pagination = ({
       <button onClick={handleNextPage} disabled={currentPage === totalPages}>
         Next
       </button>
-      <button onClick={goToLastPage} style={{ marginLeft: "10px" }}>
-        Last Page
-      </button>
     </div>
   );
 };
