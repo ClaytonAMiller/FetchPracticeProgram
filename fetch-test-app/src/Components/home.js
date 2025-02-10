@@ -1,5 +1,6 @@
 import Dogs from "./dogs";
 import React from "react";
+import { Helmet } from "react-helmet";
 
 function Home() {
   function logout($name, $email) {
@@ -42,11 +43,19 @@ function Home() {
   }
 
   return (
-    <div>
-      <Dogs  />
-      <button type="button" onClick={handleLogout}>
+    <div className="site-container">
+      <Helmet>
+        <title>Fetch: Find Your Next Best Friend</title>
+        <meta
+          name="description"
+          content="Find your next best friend with Fetch. Explore a variety of dog breeds, ages, and more to find the perfect companion for you."
+        />
+      </Helmet>
+      <button className="logout-button" type="button" onClick={handleLogout}>
         Logout
       </button>
+      <Dogs  />
+      
     </div>
   );
 }

@@ -1,19 +1,90 @@
+
+.site-container {
+  background-color: #150627;
+  min-height: 100vh;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: white;
+}
+
+p{
+  font-size: 1.5rem;
+}
+
+button{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: white;
+}
+
+.title{
+  margin: 1vw 0 1vw 5vw;
+  font-size: 3rem;
+}
+
+.logout-button{
+  margin: 0 10px;
+    background-color: #7B1F6F;
+    border: none;
+    border-radius: 1vw;
+    padding: 0.5vw;
+    font-size: 1.3rem;
+    position: absolute;
+    right: 0;
+    top: 1vw;
+}
+
+.matched-dog-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+}
+
 .dog-container {
     display: flex;
     flex-direction: column;
     width: 25vw;
+    background-color: #7B1F6F;
+    margin: 1vw;
+    border-radius: 2vw;
+    border: .5rem solid #280243;
+    padding: 0 0.5vw;
   }
   
   .favorite-button {
     position: relative;
     top: 0;
-    left: 21.75vw;
+    left: 0;
+    width: -moz-fit-content;
     width: fit-content;
+    align-self: center;
+    background-color: #FBA918;
+    margin: 1vw;
+    font-size: 2rem;
+    border: none;
+    border-radius: 1vw;
+    padding: 0.4vw;
+  }
+
+  button:hover {
+    cursor: pointer;
+    scale: 1.1;
+  }
+
+  .favorite{
+    border-color: #f0dd82;
   }
   
   .dog-details {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
   }
   
   .dog-img {
@@ -23,8 +94,31 @@
   .filters {
     display: flex;
     flex-direction: column;
+    margin: 0 0 0 5vw;
   }
   
+  .breedTags {
+    display: flex;
+        max-width: 30vw;
+        flex-wrap: wrap;
+        color: black;
+  }
+  .filter-button {
+    font-size: 1.5rem;
+    border-radius: 1vw;
+    border: none;
+    background-color: #7B1F6F;
+    margin: 0.3vw 1vw 0.3vw 0;
+    padding: 0.5vw;
+  }
+  .match-button{
+    font-size: 1.5rem;
+    border-radius: 1vw;
+    border: none;
+    background-color: #FBA918;
+    padding: 0.5vw;
+  }
+
   .breedTags .tag {
     display: flex;
     align-items: center;
@@ -48,6 +142,8 @@
   
   .filters-select {
     margin-bottom: 10px;
+    font-size: 1.5rem;
+    width: fit-content;
   }
   
   .filters-input {
@@ -58,20 +154,84 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: 6vw;
   }
   
   .pagination-button {
     margin: 0 10px;
+    background-color: #7B1F6F;
+    border: none;
+    border-radius: 1vw;
+    padding: 0.5vw;
+    font-size: 1.3rem;
   }
   
   .pagination-info {
     margin: 0 10px;
+    display: flex;
+    align-items: center;
   }
   
   .dog-list-container {
     display: flex;
-    max-width: 80vw;
+    max-width: 90vw;
     flex-wrap: wrap;
     justify-content: space-between;
     align-self: center;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .matched-dog{
+    height: 16vw;
+    width: 32vw;
+  }
+
+  @media (max-width: 768px) {
+    h2{
+      margin:  0 1vw;
+    }
+    .dog-container {
+      width: 90vw;
+    }
+
+    .dog-img {
+      height: 45vw;
+    }
+
+    .title {
+      font-size: 2.6rem;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      margin: 6vw;
+    }
+
+    .breedTags{
+      max-width: 90vw;
+    }
+
+  }
+
+  @media (max-width: 400px) {
+    .filters-select{
+      font-size: 1em;
+    }
+    .filters-button{
+      font-size: 1em;
+    }
+    .filters-input{
+      font-size: 1em;
+    }
+    .favorite-button{
+      font-size: 1em;
+    }
   }

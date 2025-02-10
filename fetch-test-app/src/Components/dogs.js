@@ -48,18 +48,28 @@ const Dogs = (props) => {
 
   const buildQueryString = (params) => {
     return Object.keys(params)
-      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+      .filter((key) => params[key]) // Only include parameters that have values
+      .map((key) => {
+        if (Array.isArray(params[key])) {
+          return params[key]
+            .map((value) => `${key}=${encodeURIComponent(value)}`)
+            .join("&");
+        }
+        return `${key}=${encodeURIComponent(params[key])}`;
+      })
       .join("&");
   };
 
   const getAllDogs = useCallback((page = 1) => {
     const params = {
-      breeds: breedFilter.join(","),
-      zipCodes: zipCodeFilter.join(","),
       sort: sortBy,
       from: (page - 1) * size,
       size: size,
     };
+
+    if (breedFilter.length > 0) {
+      params.breeds = breedFilter;
+    }
 
     const queryString = buildQueryString(params);
     const url = `https://frontend-take-home-service.fetch.com/dogs/search?${queryString}`;
@@ -87,7 +97,7 @@ const Dogs = (props) => {
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
-  }, [breedFilter, zipCodeFilter, sortBy]);
+  }, [breedFilter, sortBy]);
 
   const matchWithDog = useCallback(() => {
     const url = `https://frontend-take-home-service.fetch.com/dogs/match`;
@@ -117,6 +127,10 @@ const Dogs = (props) => {
   }, [favorites]);
 
   const handleMatchWithDog = useCallback(() => {
+    if (favorites.length === 0) {
+      alert("Please select some favorites first.");
+      return;
+    }
     matchWithDog();
     setMatchedDogDisplay("flex");
     document.body.style.overflow = "hidden";
@@ -133,7 +147,7 @@ const Dogs = (props) => {
 
   useEffect(() => {
     getAllDogs(currentPage);
-  }, [breedFilter, zipCodeFilter, currentPage, getAllDogs]);
+  }, [breedFilter, currentPage, getAllDogs]);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -212,7 +226,7 @@ const Dogs = (props) => {
         view={matchedDogDisplay}
         setView={setMatchedDogDisplay}
       />
-      <h1>Dogs</h1>
+      <h1 className="title">Find Your Next Best Friend Here!</h1>
       <Filters
         breeds={breeds}
         breedFilter={breedFilter}
@@ -227,7 +241,7 @@ const Dogs = (props) => {
         handleSortByDesc={handleSortByDesc}
         handleSortByAsc={handleSortByAsc}
       />
-      <DogList dogIds={dogs} handleFavoriteClick={handleFavoriteClick} />
+      <DogList dogIds={dogs} handleFavoriteClick={handleFavoriteClick} favorites={favorites} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

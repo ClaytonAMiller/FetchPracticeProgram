@@ -38,7 +38,7 @@ function Login() {
     }
     
     return (
-        <div>
+        <div className="site-container">
             <input id="name" type="text" placeholder="Name" />
             <input id="email" type="text" placeholder="Email" />
             <button type="button" onClick={handleSubmit}>Submit</button>

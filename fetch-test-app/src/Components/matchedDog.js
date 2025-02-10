@@ -56,48 +56,19 @@ function MatchedDog(props) {
   }
 
   return (
-    <div
-      className="matched-dog-modal"
-      style={{
-        display: props.view,
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        position: "fixed",
-        zIndex: "1000",
-        top: "0",
-        left: "0",
-      }}
-    >
-      <div
-        className="dog-container"
-        style={{ display: "flex", flexDirection: "column", width: "25vw", backgroundColor: "white" }}
-      >
-        <button
-          onClick={handleClose}
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            background: "none",
-            border: "none",
-            fontSize: "20px",
-            cursor: "pointer",
-          }}
-        >
+    <div className="matched-dog-modal" style={{ display: props.view }}>
+      <div className="dog-container matched-dog">
+        <button className="close-button" onClick={handleClose}>
           x
         </button>
-        <p>name: {name}</p>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2>NAME: {name}</h2>
+        <div className="dog-details">
           <div>
-            <p>age: {age}</p>
-            <p>zip: {zip}</p>
-            <p>breed: {breed}</p>
+            <p>Age: {age}</p>
+            <p>Zip: {zip}</p>
+            <p>Breed: {breed}</p>
           </div>
-
-          <img src={image} alt={name} style={{ height: "10vw" }} />
+          <img src={image} alt={name} className="dog-img" />
         </div>
       </div>
     </div>

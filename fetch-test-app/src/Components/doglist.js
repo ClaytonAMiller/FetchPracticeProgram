@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../Styles/styles.css";
 
-const DogList = React.memo(({ dogIds, handleFavoriteClick }) => {
+const DogList = React.memo(({ dogIds, handleFavoriteClick, favorites }) => {
   const [dogs, setDogs] = useState([]);
 
   const getDogs = useCallback(() => {
@@ -39,17 +39,18 @@ const DogList = React.memo(({ dogIds, handleFavoriteClick }) => {
   return (
     <div className="dog-list-container">
       {dogs.map((dog, index) => (
-        <div key={index} className="dog-container">
-          <button className="favorite-button" onClick={() => handleFavoriteClick(dog.id)}>Favorite</button>
-          <p>name: {dog.name}</p>
+        <div key={index} className={`dog-container ${favorites.includes(dog.id) ? 'favorite' : ''}`}>
+          
+          <h2>NAME: {dog.name}</h2>
           <div className="dog-details">
             <div>
-              <p>age: {dog.age}</p>
-              <p>zip: {dog.zip_code}</p>
-              <p>breed: {dog.breed}</p>
+              <p>Age: {dog.age}</p>
+              <p>Zip: {dog.zip_code}</p>
+              <p>Breed: {dog.breed}</p>
             </div>
             {dog.img && <img src={dog.img} alt={dog.name} className="dog-img" />}
           </div>
+          <button className="favorite-button" onClick={() => handleFavoriteClick(dog.id)}>Favorite</button>
         </div>
       ))}
     </div>
